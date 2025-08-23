@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% if booked %}
+        <h1>Room {{ room.number }} booked!</h1>
+    {% else %}
+        <h1>Book room {{ room.number }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        <p>
+        <label for="customer_name">Your full name:</label>
+        <input type="text" id="customer_name" name="customer_name" required>
+        </p>
+        <p>
+        <label for="booking_date">Choose check in time:</label>
+        <input type="datetime-local" id="start_time" name="start_time">
+        </p>
+        <p>
+        <label for="booking_date">Choose check out time:</label>
+        <input type="datetime-local" id="end_time" name="end_time">
+        </p>
+            <button type="submit">Book</button>
+        </form>
+    {% endif %}
+    <p><a href="{% url 'index' %}">Back to home</a></p>
+</body>
+</html>

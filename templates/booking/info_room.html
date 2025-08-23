@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Room {{ room.number }} details</h1>
+    <p>Capacity: {{ room.capacity }}</p>
+    <p>Price per night: ${{ room.price_per_night }}</p>
+
+    <h2>Existing bookings for this room:</h2>
+    {% if bookings %}
+        <ul>
+        {% for booking in bookings %}
+            <li>{{ booking.customer_name }}: {{ booking.start_time }} to {{ booking.end_time }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No bookings for this room yet.</p>
+    {% endif %}
+
+    <a href="{% url 'book_room' room.number %}">Book this room</a>
+    <p><a href="{% url 'index' %}">Back to home</a></p>
+{% endblock %}

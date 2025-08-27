@@ -22,6 +22,7 @@ class Booking(models.Model):
     end_time = models.DateTimeField()
     creation_time = models.DateTimeField(auto_now_add=True)
     customer_name = models.CharField(max_length=100, default='Guest')
+    customer_email = models.EmailField(max_length=254)
 
     def __str__(self):
         return f"Booking by {self.customer_name} for Room #{self.room.number} from {self.start_time} to {self.end_time}"

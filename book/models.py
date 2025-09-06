@@ -31,3 +31,14 @@ class Booking(models.Model):
         verbose_name = "Booking"
         verbose_name_plural = "Bookings"
         ordering = ['start_time']
+
+class RoomImage(models.Model):
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='room_images/')
+
+    def __str__(self):
+        return f"Image for Room #{self.room.number}"
+
+    class Meta:
+        verbose_name = "Room Image"
+        verbose_name_plural = "Room Images"

@@ -3,34 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Booking system</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
 <body>
+<div class="container mt-5">
+
     {% if booked %}
-        <h1>Room {{ room.number }} booked!</h1>
+        <div class="alert alert-success text-center shadow-sm p-4 rounded">
+            <h2 class="alert-heading mb-3">Success!</h2>
+            <p class="mb-0">Room <strong>{{ room.number }}</strong> has been booked successfully.</p>
+        </div>
+    {% elif error %}
+        <div class="alert alert-danger text-center shadow-sm p-4 rounded">
+            <h2 class="alert-heading mb-3">Oops!</h2>
+            <p class="mb-0">{{ error }}</p>
+        </div>
     {% else %}
-        <h1>Book room {{ room.number }}</h1>
-    <form method="post">
-        {% csrf_token %}
-        <p>
-        <label for="customer_name">Your full name:</label>
-        <input type="text" id="customer_name" name="customer_name" required>
-        </p>
-        <p>
-        <label for="customer_email">Your email:</label>
-        <input type="email" id="customer_email" name="customer_email" required>
-        </p>
-        <p>
-        <label for="booking_date">Choose check in time:</label>
-        <input type="datetime-local" id="start_time" name="start_time">
-        </p>
-        <p>
-        <label for="booking_date">Choose check out time:</label>
-        <input type="datetime-local" id="end_time" name="end_time">
-        </p>
-            <button type="submit">Book</button>
-        </form>
+        <div class="card shadow-sm mx-auto" style="max-width: 600px;">
+            <div class="card-body">
+                <h2 class="card-title mb-4 text-center">Book Room {{ room.number }}</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="customer_name" class="form-label">Your full name:</label>
+                        <input type="text" id="customer_name" name="customer_name" class="form-control" placeholder="John Doe" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="customer_email" class="form-label">Your email:</label>
+                        <input type="email" id="customer_email" name="customer_email" class="form-control" placeholder="you@example.com" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="start_time" class="form-label">Check-in time:</label>
+                        <input type="datetime-local" id="start_time" name="start_time" class="form-control" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="end_time" class="form-label">Check-out time:</label>
+                        <input type="datetime-local" id="end_time" name="end_time" class="form-control" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success w-100">Book Now</button>
+                </form>
+            </div>
+        </div>
     {% endif %}
-    <p><a href="{% url 'index' %}">Back to home</a></p>
+
+    <div class="text-center mt-4">
+        <a href="{% url 'index' %}" class="btn btn-danger">Back to Home</a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoVvCOmBq2D8v5j7gB1z4wGhT6r6sHZnroO7MxF4p6QK9k+" crossorigin="anonymous"></script>
 </body>
 </html>
+я

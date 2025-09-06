@@ -1,9 +1,48 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1>Rooms</h1>
-    {% for room in rooms %}
-        <p><a href="{% url 'book_room' room.number %}">{{ room }}</a></p><a href="{% url 'info_room' room.number %}">More details</a>
-    {% endfor %}
-    
-    <h2><a href="{% url 'all_bookings' %}">See all bookings</a></h2>
+<div class="container mt-4">
+    <h1 class="mb-4">Rooms</h1>
+
+    <div class="row">
+        {% for room in rooms %}
+        <div class="col-md-4 mb-4">
+            <a href="{% url 'info_room' room.number %}" class="text-decoration-none text-dark">
+                <div class="card bg-dark shadow-sm rounded-4 h-100 room-card">
+                    {% if room.images %}
+                    {% for image in room.images.all %}
+                    {% if forloop.first %}
+                        <img src="{{ image.image.url }}" class="card-img-top rounded-top-4" alt="Room {{ room.number }}">
+                    {% endif %}
+                    {% endfor %}
+                    {% else %}
+                        <img src="https://via.placeholder.com/400x250?text=Room+{{ room.number }}" 
+                             class="card-img-top rounded-top-4" alt="Room {{ room.number }}">
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <p class="card-text text-light">Room number: {{ room.number }}<span class="badge text-bg-warning">WOW PRICE</span></p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% empty %}
+        <p class="text-center">No rooms available</p>
+        {% endfor %}
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{% url 'all_bookings' %}" class="btn btn-primary btn-lg">See all bookings</a>
+    </div>
+</div>
+
+<style>
+.room-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer; /* курсор как у кнопки */
+}
+.room-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    border: 1px solid #0d6efd; /* лёгкая подсветка рамки при наведении */
+}
+</style>
 {% endblock %}

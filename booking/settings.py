@@ -121,3 +121,17 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Налаштування для відправлення email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # SMTP-сервер Gmail
+EMAIL_PORT = 587               # Порт для TLS
+EMAIL_USE_TLS = True           # Використання TLS для безпеки
+EMAIL_HOST_USER = 'miagreengal@gmail.com'  # Твій email
+EMAIL_HOST_PASSWORD = 'fvxl rwsi qnro kiyo'  # Пароль програми (не звичайний пароль Gmail)
+
+# Додаткові налаштування
+DEFAULT_FROM_EMAIL = 'miagreengal@gmail.com'  # Email, з якого відправлятимуться листи

@@ -1,9 +1,37 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1>Room {{ room.number }} details</h1>
-    <p>Capacity: {{ room.capacity }}</p>
-    <p>Price per night: ${{ room.price_per_night }}</p>
-    <p>Location: {{ room.location }}</p>
+<div class="container mt-4">
+    <p class="h1">Room {{ room.number }} details</p>
+    <ul class="list-group mb-4">
+        <li class="list-group-item bg-secondary text-light"><strong>Capacity:</strong> {{ room.capacity }}</li>
+        <li class="list-group-item bg-secondary text-light"><strong>Price per night:</strong> ${{ room.price_per_night }}</li>
+        <li class="list-group-item bg-secondary text-light"><strong>Location:</strong> {{ room.location }}</li>
+    </ul>
+
+    <!-- Галерея изображений -->
+    {% if room.images %}
+    <div class="row mb-4">
+        {% for image in room.images.all %}
+        <div class="col-md-4 mb-3">
+            <!-- Превью картинки -->
+            <img src="{{ image.image.url }}" 
+                 class="img-fluid rounded shadow-sm clickable-img" 
+                 alt="Room {{ room.number }}" 
+                 data-bs-toggle="modal" 
+                 data-bs-target="#imageModal" 
+                 data-bs-src="{{ image.image.url }}">
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <img src="https://via.placeholder.com/800x400?text=Room+{{ room.number }}" 
+             class="img-fluid mb-4 rounded clickable-img"
+             alt="Room {{ room.number }}"
+             data-bs-toggle="modal"
+             data-bs-target="#imageModal" 
+             data-bs-src="https://via.placeholder.com/800x400?text=Room+{{ room.number }}">
+    {% endif %}
+
 
     <h2>Existing bookings for this room:</h2>
     {% if bookings %}
@@ -16,6 +44,32 @@
         <p>No bookings for this room yet.</p>
     {% endif %}
 
-    <a href="{% url 'book_room' room.number %}">Book this room</a>
-    <p><a href="{% url 'index' %}">Back to home</a></p>
+
+    <a href="{% url 'book_room' room.number %}" class="btn btn-primary">Book this room</a><br>
+    <a href="{% url 'index' %}" class="btn btn-danger mt-2">Back to home</a>
+</div>
+
+
+<div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content bg-transparent border-0">
+      <img id="modalImage" src="" class="img-fluid rounded shadow-lg animate__animated animate__fadeIn" alt="Room image">
+    </div>
+  </div>
+</div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const modalImage = document.getElementById("modalImage");
+    const imageModal = document.getElementById("imageModal");
+
+    imageModal.addEventListener("show.bs.modal", function (event) {
+        const img = event.relatedTarget;
+        const src = img.getAttribute("data-bs-src");
+        modalImage.src = src;
+    });
+});
+</script>
+
 {% endblock %}

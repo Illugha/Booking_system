@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
     <h1>All bookings</h1>
-    {% for booking in bookings %}
-        <p>{{ booking }}</p>
-    {% empty %}
-        <p>No bookings yet</p>
-    {% endfor %}
-    <p><a href="{% url 'index' %}">Back to home</a></p>
+    <ul class="list-group mb-4">
+        {% for booking in bookings %}
+            <li class="list-group-item bg-warning-subtle text-dark">{{ booking }}</li>
+        {% empty %}
+            <p>No bookings yet</p>
+        {% endfor %}
+    </ul>
+    <p><a class="btn btn-danger" href="{% url 'index' %}">Back to home</a></p>
 {% endblock %}

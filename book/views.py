@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.conf import settings
 from datetime import datetime
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 from book.models import Booking, Room
 
@@ -44,36 +46,49 @@ def book_room(request, room_num):
 
             if overlap:
                 error = "This room is already booked for the selected period."
-            else:
+
+            if not overlap:
+                email_title = "Booking Confirmation"
+                html_content = render_to_string("booking/booking_email.html", {
+                    'room': room,
+                    'start_time': start_time,
+                    'end_time': end_time,
+                    'customer_name': customer_name
+                    })
+                text_content = strip_tags(html_content)
+                email = EmailMultiAlternatives(
+                    email_title,
+                    text_content,
+                    settings.EMAIL_HOST_USER,
+                    [customer_email]
+                )
+                email.attach_alternative(html_content, "text/html")
+                email.send()
                 Booking.objects.create(
                     room=room,
                     start_time=start_time,
                     end_time=end_time,
-                    customer_name=customer_name
-                )
+                    customer_name=customer_name,
+                    customer_email=customer_email
+                ).save()
                 booked = True
-
-
-                email_title = "Booking Confirmation"
-                email_body = (
-                    f"Dear {customer_name},\n\n"
-                    f"Your booking for Room #{room.number} from {start_time} to {end_time} has been confirmed.\n\n"
-                    "Thank you!"
-                )
-
-                send_mail(
-                    email_title,
-                    email_body,
-                    settings.EMAIL_HOST_USER,
-                    [customer_email],
-                    fail_silently=False,
-                )
-
+            
     return render(
         request,
         'booking/book_room.html',
         {'room': room, 'booked': booked, 'error': error}
     )
+
+def confirm_booking(request, room_id):
+    booking = get_object_or_404(Booking, room_id=room_id, confirmed=False)
+    if not booking.confirmed:
+        booking.confirmed = True
+        booking.save()
+        message = "Your booking has been confirmed. Thank you!"
+    else:
+        message = "This booking has already been confirmed."
+    
+    return render(request, 'booking/confirm_booking.html', {'message': message, 'booking': booking})
 
 def info_room(request, room_num):
     room = Room.objects.get(number=room_num)

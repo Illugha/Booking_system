@@ -8,12 +8,10 @@
         <li class="list-group-item bg-secondary text-light"><strong>Location:</strong> {{ room.location }}</li>
     </ul>
 
-    <!-- Галерея изображений -->
     {% if room.images %}
     <div class="row mb-4">
         {% for image in room.images.all %}
         <div class="col-md-4 mb-3">
-            <!-- Превью картинки -->
             <img src="{{ image.image.url }}" 
                  class="img-fluid rounded shadow-sm clickable-img" 
                  alt="Room {{ room.number }}" 

@@ -2,10 +2,9 @@
 {% block content %}
 <div class="container mt-4">
     <h1 class="mb-4">Rooms</h1>
-
-    <div class="row">
+    <div class="row" id="roomsContainer">
         {% for room in rooms %}
-        <div class="col-md-4 mb-4">
+        <div class="col-md-4 mb-4 room-card-wrapper" data-capacity="{{ room.capacity }}">
             <a href="{% url 'info_room' room.number %}" class="text-decoration-none text-dark">
                 <div class="card bg-dark shadow-sm rounded-4 h-100 room-card">
                     {% if room.images %}
@@ -19,7 +18,13 @@
                              class="card-img-top rounded-top-4" alt="Room {{ room.number }}">
                     {% endif %}
                     <div class="card-body d-flex flex-column">
-                        <p class="card-text text-light">Room number: {{ room.number }}<span class="badge text-bg-warning">WOW PRICE</span></p>
+                        <p class="card-text text-light">
+                            Room number: {{ room.number }}
+                            {% if room.is_new %}
+                            <span class="badge text-bg-warning">NEW</span>
+                            {% endif %}
+                        </p>
+                        <p class="card-text text-light">Capacity: {{ room.capacity }}</p>
                     </div>
                 </div>
             </a>
@@ -37,12 +42,34 @@
 <style>
 .room-card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer; /* курсор как у кнопки */
+    cursor: pointer;
 }
 .room-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-    border: 1px solid #0d6efd; /* лёгкая подсветка рамки при наведении */
+    border: 1px solid #0d6efd;
 }
 </style>
+
+<script>
+const range = document.getElementById("range2");
+const output = document.getElementById("rangeValue");
+const rooms = document.querySelectorAll(".room-card-wrapper");
+
+output.textContent = range.value;
+
+range.addEventListener("input", function() {
+    const selected = parseInt(range.value);
+    output.textContent = selected;
+
+    rooms.forEach(room => {
+        const capacity = parseInt(room.dataset.capacity);
+        if (capacity >= selected) {
+            room.style.display = "block";
+        } else {
+            room.style.display = "none";
+        }
+    });
+});
+</script>
 {% endblock %}
